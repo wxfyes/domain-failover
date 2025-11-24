@@ -13,9 +13,9 @@ NC='\033[0m' # No Color
 
 # 固定的目标域名列表 (基于您的需求)
 TARGET_DOMAINS_LIST=(
-    "qdlt.808622.xyz" 
-    "123.808622.xyz" 
-    "456.808622.xyz"
+    "qdlt.替换检测域名.xyz" 
+    "123.替换检测域名.xyz" 
+    "456.替换检测域名.xyz"
 )
 INSTALL_DIR="/opt/failover"
 CONFIG_FILE="$INSTALL_DIR/config.env"
@@ -41,17 +41,17 @@ echo -e "\n${GREEN}--- 2. 故障转移目标配置 (可按 Enter 使用默认值
 echo -e "注: IP 列表请用逗号分隔，优先级按顺序。"
 
 # 组 0
-DEFAULT_FB0="cu1.xcuuu.cn"
+DEFAULT_FB0="cu1.被检测域名.cn"
 read -r -p " [0] ${TARGET_DOMAINS_LIST[0]} 的备用目标 [默认: $DEFAULT_FB0]: " FB_TARGET0
 FB_TARGET0=${FB_TARGET0:-$DEFAULT_FB0}
 
 # 组 1
-DEFAULT_FB1="cu2.xcuuu.cn"
+DEFAULT_FB1="cu2.被检测域名.cn"
 read -r -p " [1] ${TARGET_DOMAINS_LIST[1]} 的备用目标 [默认: $DEFAULT_FB1]: " FB_TARGET1
 FB_TARGET1=${FB_TARGET1:-$DEFAULT_FB1}
 
 # 组 2 (多静态 IP)
-DEFAULT_FB2="9.9.9.9,8.8.8.8,1.1.1.1"
+DEFAULT_FB2="9.9.9.9,8.8.8.8,1.1.1.1,添加备用IP"
 read -r -p " [2] ${TARGET_DOMAINS_LIST[2]} 的备用目标 (多IP) [默认: $DEFAULT_FB2]: " FB_TARGET2
 FB_TARGET2=${FB_TARGET2:-$DEFAULT_FB2}
 
