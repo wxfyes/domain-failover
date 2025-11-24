@@ -11,5 +11,5 @@
 
 6.配置 Crontab 定时任务（每 5 分钟执行一次）。
 ```
-chmod +x install.sh
+wget https://raw.githubusercontent.com/wxfyes/domain-failover/refs/heads/main/install.sh && chmod +x install.sh && ./install.sh
 ```
