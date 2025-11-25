@@ -43,6 +43,9 @@ chmod +x /opt/failover/failover_script.sh
 Bash
 
 crontab -e
-# 添加：*/5 * * * * /usr/bin/bash /opt/failover/failover_script.sh
+ 添加：*/5 * * * * /usr/bin/bash /opt/failover/failover_script.sh
+```
+```
+然后运行
 /etc/init.d/cron restart
 ```
