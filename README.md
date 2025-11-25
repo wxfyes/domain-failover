@@ -14,6 +14,68 @@
 wget https://raw.githubusercontent.com/wxfyes/domain-failover/refs/heads/main/install.sh && chmod +x install.sh && ./install.sh
 ```
 ### 如果在openwrt中报错，可能是修改后的语法问题导致
+步骤一：SSH 并安装依赖
+通过 SSH 连接到您的 OpenWrt 路由器，并使用 opkg 包管理器安装必需的工具。
+
+Bash
+
+## 步骤一. 更新包列表
+```
+opkg update
+```
+### 2. 安装所有依赖
+#### 注意：脚本依赖 Bash 的高级数组功能，所以必须安装 bash
+```
+opkg install bash curl jq netcat bind-dig
+```
+
+##### 提示: 如果 bind-dig 占用空间太大，可以尝试安装 dnsmasq-full (可能包含 dig 功能)
+##### 如果 netcat 提示找不到，可能需要安装 nc 或 netcat-openbsd
+## 步骤二：创建工作目录和配置路径
+OpenWrt 路由器通常没有 /opt 目录。我们建议使用 /root 或 /etc/config 附近的目录。
+
+Bash
+
+### 创建工作目录
+```
+mkdir -p /root/failover 
+cd /root/failover
+```
+## 步骤三：修改脚本中的路径
+您需要将您的 failover_script.sh 文件中的路径变量修改为 /root/failover：
+
+请编辑 /root/failover/failover_script.sh 文件（如果它是您从一键脚本中提取出来的）：
+```
+Bash
+
+# 找到这两行（位于脚本顶部）：
+# SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+# CONFIG_FILE="$SCRIPT_DIR/config.env"
+# LOG_FILE="$SCRIPT_DIR/failover_log.log"
+```
+
+# 将它们修改为：
+```
+SCRIPT_DIR="/root/failover"
+CONFIG_FILE="$SCRIPT_DIR/config.env"
+LOG_FILE="$SCRIPT_DIR/failover_log.log"
+```
+步骤四：检查 SHELL 兼容性
+由于 OpenWrt 默认使用 ash，而我们的脚本是为 bash 编写的，我们需要强制脚本使用您刚刚安装的 bash。
+```
+
+请确保 /root/failover/failover_script.sh 的第一行是：
+
+Bash
+```
+#!/bin/bash
+步骤五：创建或移动配置和脚本文件
+将之前在服务器上创建的 config.env 和 failover_script.sh 文件上传或重新创建到 /root/failover 目录下。
+
+Bash
+
+# 设置权限
+chmod +x /root/failover/failover_script.sh
 #### 1. 备份原文件 (可选，但推荐)
 cp /opt/failover/failover_script.sh /opt/failover/failover_script.sh.bak
 
