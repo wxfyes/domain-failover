@@ -13,6 +13,7 @@
 ```
 wget https://raw.githubusercontent.com/wxfyes/domain-failover/refs/heads/main/install.sh && chmod +x install.sh && ./install.sh
 ```
+## PS：以上为debian\Ubuntu一键脚本，正常情况下是直接可以使用，考虑到需要检测国内IP，可能海外机器反向墙无法使用，为节约成本部署在家iStoreOS的openwrt软路由中，可能与Debian\Ubuntu不兼容，以下是完善后的脚本，唯一区别是需要手动下载2个配置文件，手动进行配置，且支持多域名多端口检测，一键脚本是单端口检测模式，可以对照参考修改两个配置文件！配置文件为通用，如没有改动bash命令行以及脚本存放路径的话！
 ### 如果在openwrt中报错，可能是修改后的语法问题导致
 步骤一：SSH 并安装依赖
 通过 SSH 连接到您的 OpenWrt 路由器，并使用 opkg 包管理器安装必需的工具。
