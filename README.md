@@ -60,7 +60,7 @@ SCRIPT_DIR="/root/failover"
 CONFIG_FILE="$SCRIPT_DIR/config.env"
 LOG_FILE="$SCRIPT_DIR/failover_log.log"
 ```
-步骤四：检查 SHELL 兼容性
+## 步骤四：检查 SHELL 兼容性
 由于 OpenWrt 默认使用 ash，而我们的脚本是为 bash 编写的，我们需要强制脚本使用您刚刚安装的 bash。
 ```
 
@@ -69,17 +69,16 @@ LOG_FILE="$SCRIPT_DIR/failover_log.log"
 Bash
 ```
 #!/bin/bash
-步骤五：创建或移动配置和脚本文件
-将之前在服务器上创建的 config.env 和 failover_script.sh 文件上传或重新创建到 /root/failover 目录下。
+## 步骤五：创建或移动配置和脚本文件
+#### 将之前在服务器上创建的 config.env 和 failover_script.sh 文件上传或重新创建到 /root/failover 目录下。此步骤已经操作可以忽略！
 
-Bash
 
-# 设置权限
+### 设置权限
 chmod +x /root/failover/failover_script.sh
 #### 1. 备份原文件 (可选，但推荐)
 cp /opt/failover/failover_script.sh /opt/failover/failover_script.sh.bak
 
-##### 2. 清理脚本文件（使用 sed 命令）
+##### 2. 清理脚本文件（使用 sed 命令）非必要操作步骤，只遇到修改后语法问题报错才使用此命令，无问题直接忽略
 ###### 这个命令会移除所有非打印ASCII字符，并将Windows换行符(\r\n)转换为Linux换行符(\n)
 ```
 sed -i 's/\r//g; s/[^[:print:][:space:]\t]//g' /opt/failover/failover_script.sh
