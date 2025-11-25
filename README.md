@@ -27,4 +27,22 @@ openwrt中可能bash的路径不对，可以尝试一下路径，直接运行whi
 ```
 /bin/bash /opt/failover/failover_script.sh
 ```
+openwet不适用apt命令，所以可以跳过脚本中的 apt 安装步骤，直接下载脚本手动上传/opt/failover/目录下即可，没有就创建一个/opt/failover/文件夹
+您不需要重新运行整个安装脚本。只需执行最后关键的 部署和验证 步骤：
 
+确保文件已就位： 确认 /opt/failover/config.env 和 /opt/failover/failover_script.sh 都在正确位置。
+
+设置权限：
+```
+Bash
+
+chmod +x /opt/failover/failover_script.sh
+```
+配置 Crontab（如果未配置）：
+```
+Bash
+
+crontab -e
+# 添加：*/5 * * * * /usr/bin/bash /opt/failover/failover_script.sh
+/etc/init.d/cron restart
+```
