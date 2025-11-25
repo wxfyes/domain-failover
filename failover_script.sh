@@ -100,7 +100,6 @@ get_dns_record_id() {
 # 域名解析函数：获取最新的 A 记录 IP
 resolve_domain() {
     local domain=$1
-    # 路径已根据之前的讨论修正
     local ip=$(/usr/bin/dig +short "$domain" A | grep -v '^;' | head -n 1) 
     echo "$ip"
 }
@@ -133,7 +132,7 @@ check_host_alive() {
     fi
 }
 
-# 更新 Cloudflare A 记录函数
+# 更新 Cloudflare A 记录函数 (已添加返回值)
 update_cf_record() {
     local target_domain=$1
     local new_ip=$2
@@ -163,26 +162,28 @@ JSON_EOF
     # 检查 API 调用结果
     if echo "$RESPONSE" | jq -e '.success' > /dev/null; then
         echo "$(date +%Y-%m-%d\ %H:%M:%S) [SUCCESS] ✅ Cloudflare DNS 更新成功！新 IP: $new_ip" | tee -a "$LOG_FILE"
-        return 0 # 【重要修正】更新成功，返回 0
+        return 0 # 更新成功，返回 0
     else
         ERROR_MSG=$(echo "$RESPONSE" | jq -r '.errors[].message')
         echo "$(date +%Y-%m-%d\ %H:%M:%S) [ERROR] ❌ Cloudflare DNS 更新失败！错误信息: $ERROR_MSG" | tee -a "$LOG_FILE"
-        return 1 # 【重要修正】更新失败，返回 1
+        return 1 # 更新失败，返回 1
     fi
 }
 
 
-# 【新增】发送通知函数 (已移动到正确位置)
+# 【新增】发送通知函数 (简化版，适用于“自定义关键词”模式)
 send_notification() {
     local message=$1
     if [ -z "$NOTIFY_WEBHOOK_URL" ]; then
         echo "$(date +%Y-%m-%d\ %H:%M:%S) [WARN] 未配置 NOTIFY_WEBHOOK_URL，跳过通知。" | tee -a "$LOG_FILE"
         return
     fi
-
-    local full_message="$NOTIFY_PREFIX $message"
     
-    # 使用通用的 JSON 结构 (适用于钉钉或类似 Webhook)
+    local final_url="$NOTIFY_WEBHOOK_URL"
+    # 注意：NOTIFY_PREFIX 必须包含钉钉关键词 "通知"
+    local full_message="$NOTIFY_PREFIX $message" 
+    
+    # 构造 JSON 数据
     local json_payload=$(cat <<JSON_EOF
 {
     "msgtype": "text",
@@ -194,12 +195,12 @@ JSON_EOF
 )
     
     # 发送 Webhook 通知
-    RESPONSE=$(curl -s -X POST "$NOTIFY_WEBHOOK_URL" \
+    RESPONSE=$(curl -s -X POST "$final_url" \
         -H 'Content-Type: application/json' \
         -d "$json_payload")
 
-    # 简单检查响应是否包含成功标记 (钉钉是 "ok", Telegram 是 "ok":true)
-    if echo "$RESPONSE" | grep -q '"errmsg":"ok"\|"ok":true'; then 
+    # 检查响应
+    if echo "$RESPONSE" | grep -q '"errmsg":"ok"'; then 
         echo "$(date +%Y-%m-%d\ %H:%M:%S) [SUCCESS] 通知发送成功。" | tee -a "$LOG_FILE"
     else
         echo "$(date +%Y-%m-%d\ %H:%M:%S) [ERROR] 通知发送失败，响应: $RESPONSE" | tee -a "$LOG_FILE"
