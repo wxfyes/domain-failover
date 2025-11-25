@@ -13,18 +13,18 @@
 ```
 wget https://raw.githubusercontent.com/wxfyes/domain-failover/refs/heads/main/install.sh && chmod +x install.sh && ./install.sh
 ```
-## PS：以上为debian\Ubuntu一键脚本，正常情况下是直接可以使用，考虑到需要检测国内IP，可能海外机器反向墙无法使用，为节约成本部署在家iStoreOS的openwrt软路由中，可能与Debian\Ubuntu不兼容，以下是完善后的脚本，唯一区别是需要手动下载2个配置文件，手动进行配置，且支持多域名多端口检测，一键脚本是单端口检测模式，可以对照参考修改两个配置文件！配置文件为通用，如没有改动bash命令行以及脚本存放路径的话！
-### 如果在openwrt中报错，可能是修改后的语法问题导致
-步骤一：SSH 并安装依赖
+###### PS：以上为debian\Ubuntu一键脚本，正常情况下是直接可以使用，考虑到需要检测国内IP，可能海外机器反向墙无法使用，为节约成本部署在家iStoreOS的openwrt软路由中，可能与Debian\Ubuntu不兼容，以下是完善后的脚本，唯一区别是需要手动下载2个配置文件，手动进行配置，且支持多域名多端口检测，一键脚本是单端口检测模式，可以对照参考修改两个配置文件！配置文件为通用，如没有改动bash命令行以及脚本存放路径的话！
+
+## 步骤一：SSH 并安装依赖
 通过 SSH 连接到您的 OpenWrt 路由器，并使用 opkg 包管理器安装必需的工具。
 
 Bash
 
-## 步骤一. 更新包列表
+ 1. 更新包列表
 ```
 opkg update
 ```
-### 2. 安装所有依赖
+ 2. 安装所有依赖
 #### 注意：脚本依赖 Bash 的高级数组功能，所以必须安装 bash
 ```
 opkg install bash curl jq netcat bind-dig
@@ -78,7 +78,7 @@ Bash
 chmod +x /root/failover/failover_script.sh
 #### 1. 备份原文件 (可选，但推荐)
 cp /opt/failover/failover_script.sh /opt/failover/failover_script.sh.bak
-
+## 如果在openwrt中报错，可能是修改后的语法问题导致
 ##### 2. 清理脚本文件（使用 sed 命令）非必要操作步骤，只遇到修改后语法问题报错才使用此命令，无问题直接忽略
 ###### 这个命令会移除所有非打印ASCII字符，并将Windows换行符(\r\n)转换为Linux换行符(\n)
 ```
